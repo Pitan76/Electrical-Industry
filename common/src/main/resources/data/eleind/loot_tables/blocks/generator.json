@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "eleind:example_block"
+          "name": "eleind:generator"
         }
       ],
       "conditions": [

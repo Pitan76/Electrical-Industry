@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "eleind:block/generator",
+    "down": "eleind:block/generator",
+    "up": "eleind:block/generator",
+    "north": "eleind:block/generator",
+    "east": "eleind:block/generator",
+    "south": "eleind:block/generator",
+    "west": "eleind:block/generator"
+  }
+}

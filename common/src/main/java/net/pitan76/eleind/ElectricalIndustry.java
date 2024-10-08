@@ -1,8 +1,10 @@
 package net.pitan76.eleind;
 
 import net.pitan76.eleind.block.Blocks;
+import net.pitan76.eleind.block.entity.BlockEntities;
 import net.pitan76.eleind.item.ItemGroups;
 import net.pitan76.eleind.item.Items;
+import net.pitan76.eleind.screen.ScreenHandlers;
 import net.pitan76.mcpitanlib.api.CommonModInitializer;
 import net.pitan76.mcpitanlib.api.registry.v2.CompatRegistryV2;
 import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
@@ -22,6 +24,8 @@ public class ElectricalIndustry extends CommonModInitializer {
         ItemGroups.init();
         Blocks.init();
         Items.init();
+        BlockEntities.init();
+        ScreenHandlers.init();
     }
 
     // ----

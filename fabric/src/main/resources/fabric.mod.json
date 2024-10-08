@@ -18,6 +18,9 @@
   "entrypoints": {
     "main": [
       "net.pitan76.eleind.fabric.ElectricalIndustryFabric"
+    ],
+    "client": [
+      "net.pitan76.eleind.fabric.ElectricalIndustryClientFabric"
     ]
   },
   "mixins": [

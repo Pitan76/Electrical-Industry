@@ -14,11 +14,9 @@ public class Items {
     public static final CompatibleItemSettings STANDARD_ITEM_SETTINGS = CompatibleItemSettings.of()
             .addGroup(ItemGroups.EI_GROUP);
 
-    public static RegistryResult<Item> EXAMPLE_ITEM;
-    public static RegistryResult<Item> EXAMPLE_BLOCK;
+    public static RegistryResult<Item> GENERATOR;
 
     public static void init() {
-        EXAMPLE_ITEM = registry.registerItem(_id("example_item"), () -> new ExampleItem(STANDARD_ITEM_SETTINGS));
-        EXAMPLE_BLOCK = registry.registerItem(_id("example_block"), () -> ItemUtil.ofBlock(Blocks.EXAMPLE_BLOCK.getOrNull(), STANDARD_ITEM_SETTINGS));
+        GENERATOR = registry.registerItem(_id("generator"), () -> ItemUtil.ofBlock(Blocks.GENERATOR.getOrNull(), STANDARD_ITEM_SETTINGS));
     }
 }

@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "eleind:block/generator"
+    }
+  }
+}

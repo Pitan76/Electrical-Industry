@@ -1,6 +1,5 @@
 {
-  "item.eleind.example_item": "Example Item",
-  "block.eleind.example_block": "Example Block",
+  "itemGroup.eleind.main": "Electric Industry",
 
-  "itemGroup.eleind.example_items": "Example Items"
+  "block.eleind.generator": "Generator"
 }
