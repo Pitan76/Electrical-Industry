@@ -5,10 +5,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.pitan76.eleind.api.energy.IEnergyStorage;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
-import net.pitan76.mcpitanlib.api.util.math.DirectionUtil;
 import net.pitan76.mcpitanlib.api.util.math.PosUtil;
-
-import java.util.List;
 
 public class EnergyUtil {
     public static long transfer(IEnergyStorage from, IEnergyStorage to, long maxAmount) {
@@ -30,7 +27,7 @@ public class EnergyUtil {
     }
 
     public static boolean canTransfer(IEnergyStorage from, IEnergyStorage to, long maxAmount) {
-        return from.canExtractEnergy(maxAmount) && to.canInsertEnergy(maxAmount);
+        return from.canExtractEnergy() && to.canInsertEnergy() && from.canExtractEnergy(maxAmount) && to.canInsertEnergy(maxAmount);
     }
 
     public static boolean canTransfer(IEnergyStorage from, IEnergyStorage to) {

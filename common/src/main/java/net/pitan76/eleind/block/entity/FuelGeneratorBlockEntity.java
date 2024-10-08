@@ -4,6 +4,7 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.world.World;
 import net.pitan76.eleind.api.energy.EnergyStorageProvider;
 import net.pitan76.eleind.api.energy.IEnergyStorage;
 import net.pitan76.eleind.api.energy.SimpleEnergyStorage;
@@ -17,10 +18,18 @@ import net.pitan76.mcpitanlib.api.event.nbt.WriteNbtArgs;
 import net.pitan76.mcpitanlib.api.event.tile.TileTickEvent;
 import net.pitan76.mcpitanlib.api.gui.args.CreateMenuEvent;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
+import net.pitan76.mcpitanlib.api.network.v2.ServerNetworking;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.NbtUtil;
+import net.pitan76.mcpitanlib.api.util.WorldUtil;
 import net.pitan76.mcpitanlib.core.registry.FuelRegistry;
+import net.pitan76.mcpitanlib.guilib.api.NetworkDefines;
 import net.pitan76.mcpitanlib.guilib.api.block.entity.ExtendedBlockEntityWithContainer;
+import net.pitan76.mcpitanlib.guilib.api.container.ExtendedBlockEntityContainerGui;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
 
 public class FuelGeneratorBlockEntity extends MachineBlockEntityWithExtendedContainer implements EnergyStorageProvider {
 
@@ -28,6 +37,8 @@ public class FuelGeneratorBlockEntity extends MachineBlockEntityWithExtendedCont
 
     public static SimpleEnergyStorage.Builder energyStorageBuilder =
             new SimpleEnergyStorage.Builder().capacity(10_000).maxInput(0).maxOutput(500);
+
+    private final IEnergyStorage energyStorage = energyStorageBuilder.build();
 
     public FuelGeneratorBlockEntity(BlockEntityType<?> type, TileCreateEvent e) {
         super(type, e);
@@ -91,7 +102,7 @@ public class FuelGeneratorBlockEntity extends MachineBlockEntityWithExtendedCont
 
     @Override
     public IEnergyStorage getEnergyStorage() {
-        return energyStorageBuilder.build();
+        return energyStorage;
     }
 
     @Override
@@ -106,6 +117,6 @@ public class FuelGeneratorBlockEntity extends MachineBlockEntityWithExtendedCont
 
     @Override
     public ScreenHandler createMenu(CreateMenuEvent e) {
-        return new FuelGeneratorScreenHandler(e, this);
+        return new FuelGeneratorScreenHandler(e, this, this);
     }
 }

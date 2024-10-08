@@ -172,12 +172,10 @@ public interface IEnergyStorage {
     }
 
     default boolean canInsertEnergy(long amount) {
-        if (!canInsertEnergy()) return false;
         return getEnergyStored() + amount <= getCapacityEnergy();
     }
 
     default boolean canExtractEnergy(long amount) {
-        if (!canExtractEnergy()) return false;
         return getEnergyStored() - amount >= 0;
     }
 

@@ -2,6 +2,7 @@ package net.pitan76.eleind.block.base;
 
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.util.ActionResult;
+import net.pitan76.eleind.block.entity.base.MachineBlockEntityWithExtendedContainer;
 import net.pitan76.mcpitanlib.api.block.CompatibleBlockSettings;
 import net.pitan76.mcpitanlib.api.block.ExtendBlock;
 import net.pitan76.mcpitanlib.api.block.ExtendBlockEntityProvider;
@@ -15,14 +16,14 @@ public abstract class MachineBlock extends ExtendBlock implements ExtendBlockEnt
 
     public ActionResult onRightClick(BlockUseEvent e) {
         if (e.isSneaking()) return e.pass();
-        if (!e.isClient()) return e.success();
+        if (e.isClient()) return e.success();
 
         if (!e.hasBlockEntity()) return e.pass();
 
         BlockEntity blockEntity = e.getBlockEntity();
-        if (!(blockEntity instanceof ExtendedBlockEntityWithContainer)) return e.pass();
+        if (!(blockEntity instanceof MachineBlockEntityWithExtendedContainer)) return e.pass();
 
-        e.player.openExtendedMenu((ExtendedBlockEntityWithContainer) blockEntity);
+        e.player.openExtendedMenu((MachineBlockEntityWithExtendedContainer) blockEntity);
         return e.success();
     }
 }
