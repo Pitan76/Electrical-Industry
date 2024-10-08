@@ -33,6 +33,6 @@ public class FuelGeneratorScreen extends ContainerGuiScreen<FuelGeneratorScreenH
     @Override
     public void drawBackgroundOverride(DrawBackgroundArgs args) {
         super.drawBackgroundOverride(args);
-        callDrawTexture(args.drawObjectDM, GuiTextures.BASE_FURNACE_BACKGROUND, 0, 0, 0, 166, 16, 16);
+        callDrawTexture(args.drawObjectDM, GuiTextures.BASE_FURNACE_BACKGROUND, x + backgroundWidth / 2 - 8, y + 35 + 16, 0, 166, 16, 16);
     }
 }
