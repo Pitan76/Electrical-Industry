@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${version}",
+  "name": "${mod_name}",
+  "description": "Electrical Industry is technology mod for Minecraft.\nIf install the mod, add energy in the world. And add machines and item that use the energy",
+  "authors": [
+    "Pitan"
+  ],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/eleind/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.pitan76.eleind.fabric.ElectricalIndustryFabric"
+    ]
+  },
+  "mixins": [
+    "eleind.mixins.json",
+    "eleind-common.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": "*",
+    "minecraft": ">=1.17",
+    "mcpitanlib": "*"
+  }
+}

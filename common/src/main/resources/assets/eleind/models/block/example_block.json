@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "eleind:block/example_block",
+    "down": "eleind:block/example_block",
+    "up": "eleind:block/example_block",
+    "north": "eleind:block/example_block",
+    "east": "eleind:block/example_block",
+    "south": "eleind:block/example_block",
+    "west": "eleind:block/example_block"
+  }
+}

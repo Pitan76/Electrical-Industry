@@ -1,0 +1,152 @@
+plugins {
+    id "architectury-plugin" version "3.4-SNAPSHOT"
+    id "dev.architectury.loom" version "1.6-SNAPSHOT" apply false
+    id 'com.matthewprenger.cursegradle' version '1.+'
+    id "com.modrinth.minotaur" version "2.+"
+}
+
+architectury {
+    minecraft = rootProject.minecraft_version
+}
+
+subprojects {
+    apply plugin: "dev.architectury.loom"
+    apply plugin: "com.modrinth.minotaur"
+    apply plugin: "com.matthewprenger.cursegradle"
+
+    loom {
+        silentMojangMappingsLicense()
+    }
+
+    repositories {
+        maven { url "https://maven.neoforged.net/releases" }
+        maven { url "https://maven.pitan76.net/" }
+        maven { url "https://maven.shedaniel.me/" }
+        mavenLocal()
+    }
+
+    dependencies {
+        minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
+
+        // Mojang Mappings
+        //mappings loom.officialMojangMappings()
+
+        // Fabric Yarn Mappings
+        mappings "net.fabricmc:yarn:${rootProject.yarn_mappings}:v2"
+
+        modApi "net.pitan76:mcpitanlib-common+${rootProject.mcpitanlib_version}"
+    }
+
+    /*
+    if (name in rootProject.enabled_platforms.split(",")) {
+        var modLoader = name
+
+        if (System.getenv("CURSEFORGE_TOKEN") != null) {
+            curseforge {
+                apiKey = System.getenv("CURSEFORGE_TOKEN")
+                project {
+                    id = ''
+                    changelog = rootProject.changelog + "\nMCPitanLib version: " + mcpitanlib_version.split(":")[1]
+                    releaseType = 'release'
+
+                    if (modLoader == "fabric")
+                        addGameVersion "Fabric"
+
+                    if (modLoader == "forge")
+                        addGameVersion "Forge"
+
+                    if (modLoader == "neoforge")
+                        addGameVersion "NeoForge"
+
+                    if (modLoader != "neoforge") {
+                        addGameVersion '1.18.1'
+                        addGameVersion '1.18.2'
+                        addGameVersion '1.19'
+                        addGameVersion '1.19.1'
+                        addGameVersion '1.19.2'
+                        addGameVersion '1.20'
+                        addGameVersion '1.20.1'
+                    }
+                    addGameVersion '1.20.4'
+                    if (modLoader != "forge") {
+                        addGameVersion '1.21'
+                        addGameVersion '1.21.1'
+                    }
+
+                    relations {
+                        if (modLoader == "fabric")
+                            requiredDependency "fabric-api"
+
+                        requiredDependency 'mcpitanlibarch'
+                    }
+
+                    mainArtifact(tasks.remapJar)
+                }
+                options {
+                    forgeGradleIntegration = false
+                }
+            }
+
+        }
+
+        if (System.getenv("MODRINTH_TOKEN") != null) {
+            modrinth {
+                token = System.getenv("MODRINTH_TOKEN")
+                projectId = ''
+                versionNumber = project.mod_version + "-" + modLoader
+
+                gameVersions = []
+                if (modLoader != "neoforge")
+                    gameVersions.addAll(['1.18', '1.18.1', '1.18.2', '1.19', '1.19.1', '1.19.2', '1.20', '1.20.1'])
+                gameVersions.add('1.20.4')
+                if (modLoader != "forge")
+                    gameVersions.addAll(['1.21', '1.21.1'])
+
+                versionType = 'release'
+                uploadFile = tasks.remapJar
+                changelog = rootProject.changelog + "\nMCPitanLib version: " + mcpitanlib_version.split(":")[1]
+                loaders = [modLoader]
+                dependencies {
+                    if (modLoader == "fabric")
+                        required.project "P7dR8mSH" // Fabric API
+
+                    required.project "uNRoUnGT" // MCPitanLib
+                }
+            }
+        }
+    }
+    */
+}
+
+allprojects {
+    apply plugin: "java"
+    apply plugin: "architectury-plugin"
+    apply plugin: "maven-publish"
+
+    archivesBaseName = rootProject.archives_base_name
+    mod_name = rootProject.mod_name
+    mod_id = rootProject.mod_id
+    version = rootProject.mod_version
+    group = rootProject.maven_group
+
+    repositories {
+
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = "UTF-8"
+        if (project.name == "neoforge") {
+            options.release = 17
+            sourceCompatibility = JavaVersion.VERSION_17
+            targetCompatibility = JavaVersion.VERSION_17
+        } else {
+            options.release = 8
+            sourceCompatibility = JavaVersion.VERSION_1_8
+            targetCompatibility = JavaVersion.VERSION_1_8
+        }
+    }
+
+    java {
+        withSourcesJar()
+    }
+}
