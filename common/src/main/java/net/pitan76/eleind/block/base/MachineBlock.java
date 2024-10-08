@@ -22,7 +22,7 @@ public abstract class MachineBlock extends ExtendBlock implements ExtendBlockEnt
         BlockEntity blockEntity = e.getBlockEntity();
         if (!(blockEntity instanceof ExtendedBlockEntityWithContainer)) return e.pass();
 
-        e.player.openGuiScreen((ExtendedBlockEntityWithContainer) blockEntity);
+        e.player.openExtendedMenu((ExtendedBlockEntityWithContainer) blockEntity);
         return e.success();
     }
 }
