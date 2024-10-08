@@ -1,6 +1,14 @@
 package net.pitan76.eleind.api.energy.util;
 
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.pitan76.eleind.api.energy.IEnergyStorage;
+import net.pitan76.mcpitanlib.api.util.WorldUtil;
+import net.pitan76.mcpitanlib.api.util.math.DirectionUtil;
+import net.pitan76.mcpitanlib.api.util.math.PosUtil;
+
+import java.util.List;
 
 public class EnergyUtil {
     public static long transfer(IEnergyStorage from, IEnergyStorage to, long maxAmount) {
@@ -27,5 +35,47 @@ public class EnergyUtil {
 
     public static boolean canTransfer(IEnergyStorage from, IEnergyStorage to) {
         return canTransfer(from, to, from.getMaxOutputEnergy());
+    }
+
+    public static boolean transfer(BlockEntity from, BlockEntity to) {
+        if (!(from instanceof IEnergyStorage) || !(to instanceof IEnergyStorage)) return false;
+        return transfer((IEnergyStorage) from, (IEnergyStorage) to) > 0;
+    }
+
+    public static long transfer(BlockEntity from, BlockEntity to, long maxAmount) {
+        if (!(from instanceof IEnergyStorage) || !(to instanceof IEnergyStorage)) return 0;
+        return transfer((IEnergyStorage) from, (IEnergyStorage) to, maxAmount);
+    }
+
+    public static boolean canTransfer(BlockEntity from, BlockEntity to) {
+        if (!(from instanceof IEnergyStorage) || !(to instanceof IEnergyStorage)) return false;
+        return canTransfer((IEnergyStorage) from, (IEnergyStorage) to);
+    }
+
+    public static boolean canTransfer(BlockEntity from, BlockEntity to, long maxAmount) {
+        if (!(from instanceof IEnergyStorage) || !(to instanceof IEnergyStorage)) return false;
+        return canTransfer((IEnergyStorage) from, (IEnergyStorage) to, maxAmount);
+    }
+
+    public static boolean transferNearby(BlockEntity from, long maxAmount) {
+        World world = from.getWorld();
+        BlockPos pos = from.getPos();
+
+        if (world == null) return false;
+
+        BlockPos[] nearPositions = PosUtil.getNeighborPoses(pos);
+        for (BlockPos nearPos : nearPositions) {
+            if (WorldUtil.hasBlockEntity(world, nearPos)) continue;
+
+            BlockEntity to = WorldUtil.getBlockEntity(world, nearPos);
+            if (to == null) continue;
+
+            if (canTransfer(from, to, maxAmount)) {
+                transfer(from, to, maxAmount);
+                return true;
+            }
+        }
+
+        return false;
     }
 }
