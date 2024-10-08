@@ -7,8 +7,12 @@
   "authors": [
     "Pitan"
   ],
-  "contact": {},
-  "license": "MIT",
+  "contact": {
+    "homepage": "https://curseforge.com/minecraft/mc-mods/electrical-industry",
+    "sources": "https://github.com/Pitan76/Electrical-Industry",
+    "issues": "https://github.com/Pitan76/Electrical-Industry/issues"
+  },
+  "license": "Apache-2.0",
   "icon": "assets/eleind/icon.png",
   "environment": "*",
   "entrypoints": {
