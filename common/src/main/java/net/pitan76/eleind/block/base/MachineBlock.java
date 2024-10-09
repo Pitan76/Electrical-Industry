@@ -7,7 +7,7 @@ import net.pitan76.mcpitanlib.api.block.CompatibleBlockSettings;
 import net.pitan76.mcpitanlib.api.block.ExtendBlock;
 import net.pitan76.mcpitanlib.api.block.ExtendBlockEntityProvider;
 import net.pitan76.mcpitanlib.api.event.block.BlockUseEvent;
-import net.pitan76.mcpitanlib.guilib.api.block.entity.ExtendedBlockEntityWithContainer;
+import net.pitan76.mcpitanlib.api.event.block.StateReplacedEvent;
 
 public abstract class MachineBlock extends ExtendBlock implements ExtendBlockEntityProvider {
     public MachineBlock(CompatibleBlockSettings settings) {
@@ -25,5 +25,11 @@ public abstract class MachineBlock extends ExtendBlock implements ExtendBlockEnt
 
         e.player.openExtendedMenu((MachineBlockEntityWithExtendedContainer) blockEntity);
         return e.success();
+    }
+
+    @Override
+    public void onStateReplaced(StateReplacedEvent e) {
+        e.spawnDropsInContainer();
+        super.onStateReplaced(e);
     }
 }

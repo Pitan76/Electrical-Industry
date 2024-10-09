@@ -4,7 +4,6 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.world.World;
 import net.pitan76.eleind.api.energy.EnergyStorageProvider;
 import net.pitan76.eleind.api.energy.IEnergyStorage;
 import net.pitan76.eleind.api.energy.SimpleEnergyStorage;
@@ -18,22 +17,15 @@ import net.pitan76.mcpitanlib.api.event.nbt.WriteNbtArgs;
 import net.pitan76.mcpitanlib.api.event.tile.TileTickEvent;
 import net.pitan76.mcpitanlib.api.gui.args.CreateMenuEvent;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
-import net.pitan76.mcpitanlib.api.network.v2.ServerNetworking;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.NbtUtil;
-import net.pitan76.mcpitanlib.api.util.WorldUtil;
 import net.pitan76.mcpitanlib.core.registry.FuelRegistry;
-import net.pitan76.mcpitanlib.guilib.api.NetworkDefines;
 import net.pitan76.mcpitanlib.guilib.api.block.entity.ExtendedBlockEntityWithContainer;
-import net.pitan76.mcpitanlib.guilib.api.container.ExtendedBlockEntityContainerGui;
-
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
 
 public class FuelGeneratorBlockEntity extends MachineBlockEntityWithExtendedContainer implements EnergyStorageProvider {
 
     public int burnTime = 0;
+    public int maxBurnTime = 0;
 
     public static SimpleEnergyStorage.Builder energyStorageBuilder =
             new SimpleEnergyStorage.Builder().capacity(10_000).maxInput(0).maxOutput(500);
@@ -56,10 +48,12 @@ public class FuelGeneratorBlockEntity extends MachineBlockEntityWithExtendedCont
         ItemStack stack = getStack(0);
 
         if (isBurning()) {
-            burnTime--;
-            addEnergyStored(generateEnergyAmountOnTick());
+            burnTime -= 5;
+            addEnergyStored(generateEnergyAmountOnTick() * 5);
         } else {
-            startBurn(stack);
+            boolean success = startBurn(stack);
+            if (!success)
+                maxBurnTime = 0;
         }
 
         EnergyUtil.transferNearby(this, getEnergyStored());
@@ -86,6 +80,7 @@ public class FuelGeneratorBlockEntity extends MachineBlockEntityWithExtendedCont
     }
 
     public void startBurn(int time) {
+        maxBurnTime = time;
         burnTime = time;
     }
 
@@ -108,6 +103,8 @@ public class FuelGeneratorBlockEntity extends MachineBlockEntityWithExtendedCont
     @Override
     public void sync(Player player, PacketByteBuf buf) {
         PacketByteUtil.writeLong(buf, this.getEnergyStored());
+        PacketByteUtil.writeInt(buf, this.burnTime);
+        PacketByteUtil.writeInt(buf, this.maxBurnTime);
     }
 
     @Override

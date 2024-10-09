@@ -56,6 +56,11 @@ public class FuelGeneratorScreenHandler extends ExtendedBlockEntityContainerGui<
     @Override
     public void receiveSync(PacketByteBuf buf) {
         long energy = PacketByteUtil.readLong(buf);
+        int burnTime = PacketByteUtil.readInt(buf);
+        int maxBurnTime = PacketByteUtil.readInt(buf);
+
         this.blockEntity.setEnergyStored(energy);
+        this.blockEntity.burnTime = burnTime;
+        this.blockEntity.maxBurnTime = maxBurnTime;
     }
 }
