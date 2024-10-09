@@ -8,6 +8,7 @@ import net.pitan76.mcpitanlib.api.client.render.handledscreen.DrawForegroundArgs
 import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
 import net.pitan76.mcpitanlib.api.util.TextUtil;
 import net.pitan76.mcpitanlib.guilib.GuiTextures;
+import net.pitan76.mcpitanlib.guilib.api.render.PartsRenderer;
 import net.pitan76.mcpitanlib.guilib.api.screen.ContainerGuiScreen;
 
 public class FuelGeneratorScreen extends ContainerGuiScreen<FuelGeneratorScreenHandler> {
@@ -39,11 +40,13 @@ public class FuelGeneratorScreen extends ContainerGuiScreen<FuelGeneratorScreenH
         int maxBurnTime = this.handler.blockEntity.maxBurnTime;
 
         if (burnTime > 0 && maxBurnTime > 0) {
-            int burnProgress = (int) ((double) burnTime / maxBurnTime * 16);
-            callDrawTexture(args.drawObjectDM, GuiTextures.BASE_FURNACE_BACKGROUND, x + backgroundWidth / 2 - 8, y + 35 + 32 - burnProgress, 0, 166 + 32 - burnProgress, 16, burnProgress);
+
+            PartsRenderer.drawBurningBar(args.drawObjectDM, x + backgroundWidth / 2 - 8, y + 35 + 16, burnTime, maxBurnTime);
+
+            //int burnProgress = (int) ((double) burnTime / maxBurnTime * 16);
+            //callDrawTexture(args.drawObjectDM, GuiTextures.BASE_FURNACE_BACKGROUND, x + backgroundWidth / 2 - 8, y + 35 + 32 - burnProgress, 0, 166 + 32 - burnProgress, 16, burnProgress);
         }
 
-        int percentage = (int) ((double) this.handler.blockEntity.getEnergyStored() / this.handler.blockEntity.getCapacityEnergy() * 48);
-        callDrawTexture(args.drawObjectDM, CompatIdentifier.of("minecraft", "textures/block/lava_still.png"), x + 20, y + 16 + 48 - percentage, 0, 48 - percentage, 16, percentage);
+        PartsRenderer.drawBottom2TopProgressBar(args.drawObjectDM, x + 20, y + 16, 0, 0, 0, 48, 16, 48, this.handler.blockEntity.getEnergyStored(), this.handler.blockEntity.getCapacityEnergy(), CompatIdentifier.of("minecraft", "textures/block/lava_still.png"));
     }
 }
