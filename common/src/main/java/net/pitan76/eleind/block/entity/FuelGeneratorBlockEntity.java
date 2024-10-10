@@ -17,6 +17,7 @@ import net.pitan76.mcpitanlib.api.event.nbt.WriteNbtArgs;
 import net.pitan76.mcpitanlib.api.event.tile.TileTickEvent;
 import net.pitan76.mcpitanlib.api.gui.args.CreateMenuEvent;
 import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
+import net.pitan76.mcpitanlib.api.util.BlockEntityUtil;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.NbtUtil;
 import net.pitan76.mcpitanlib.core.registry.FuelRegistry;
@@ -43,20 +44,22 @@ public class FuelGeneratorBlockEntity extends MachineBlockEntityWithExtendedCont
     @Override
     public void tick(TileTickEvent<ExtendedBlockEntityWithContainer> e) {
         super.tick(e);
-        if (isClient() || isFullEnergy()) return;
+        if (isClient()) return;
 
-        ItemStack stack = getStack(0);
-
-        if (isBurning()) {
-            burnTime -= 5;
-            addEnergyStored(generateEnergyAmountOnTick() * 5);
-        } else {
-            boolean success = startBurn(stack);
-            if (!success)
-                maxBurnTime = 0;
+        if (!isFullEnergy()) {
+            ItemStack stack = getStack(0);
+            if (isBurning()) {
+                burnTime -= 5;
+                addEnergyStored(generateEnergyAmountOnTick() * 5);
+            } else {
+                boolean success = startBurn(stack);
+                if (!success)
+                    maxBurnTime = 0;
+            }
         }
 
         EnergyUtil.transferNearby(this, getEnergyStored());
+        BlockEntityUtil.markDirty(this);
     }
 
     @Override
