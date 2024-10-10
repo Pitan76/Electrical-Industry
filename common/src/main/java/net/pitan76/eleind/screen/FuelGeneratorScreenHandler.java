@@ -17,17 +17,13 @@ public class FuelGeneratorScreenHandler extends ExtendedBlockEntityContainerGui<
     protected final PlayerInventory playerInventory;
     protected final Inventory inventory;
 
-    public FuelGeneratorScreenHandler(int syncId, PlayerInventory inventory, PacketByteBuf buf) {
-        super(ScreenHandlers.FUEL_GENERATOR_SCREEN_HANDLER.get(), new CreateMenuEvent(syncId, inventory), buf);
+    public FuelGeneratorScreenHandler(CreateMenuEvent e, PacketByteBuf buf) {
+        super(ScreenHandlers.FUEL_GENERATOR_SCREEN_HANDLER.get(), e, buf);
         this.inventory = InventoryUtil.createSimpleInventory(1);
-        this.playerInventory = inventory;
+        this.playerInventory = e.playerInventory;
 
         initSlots();
     }
-//
-//    public FuelGeneratorScreenHandler(CreateMenuEvent e) {
-//        this(e, InventoryUtil.createSimpleInventory(1));
-//    }
 
     public FuelGeneratorScreenHandler(CreateMenuEvent e, Inventory inventory, FuelGeneratorBlockEntity blockEntity) {
         this(ScreenHandlers.FUEL_GENERATOR_SCREEN_HANDLER.get(), e, inventory);
