@@ -4,7 +4,6 @@ import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.pitan76.eleind.ElectricalIndustry;
 import net.pitan76.eleind.api.energy.IEnergyStorage;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
 import net.pitan76.mcpitanlib.api.util.math.PosUtil;
@@ -75,7 +74,7 @@ public class EnergyUtil {
     }
 
     @ExpectPlatform
-    protected static long transferOther(BlockEntity from, BlockEntity to, long maxAmount) {
+    public static long transferOther(BlockEntity from, BlockEntity to, long maxAmount) {
         throw new AssertionError();
     }
 

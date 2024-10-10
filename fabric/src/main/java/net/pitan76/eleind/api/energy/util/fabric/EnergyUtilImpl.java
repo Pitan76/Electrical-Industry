@@ -27,7 +27,7 @@ public class EnergyUtilImpl {
         return trFrom.supportsExtraction() && trTo.supportsInsertion() && trFrom.getAmount() - maxAmount >= 0 && trTo.getAmount() + maxAmount <= trTo.getCapacity();
     }
 
-    protected static long transferOther(BlockEntity from, BlockEntity to, long maxAmount) {
+    public static long transferOther(BlockEntity from, BlockEntity to, long maxAmount) {
         if (!isLoadedTeamRebornEnergy()) return 0;
 
         EnergyStorage trFrom = null;
