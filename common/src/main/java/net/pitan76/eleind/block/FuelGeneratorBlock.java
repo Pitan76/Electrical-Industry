@@ -5,11 +5,19 @@ import net.pitan76.eleind.block.base.MachineBlock;
 import net.pitan76.eleind.block.entity.FuelGeneratorBlockEntity;
 import net.pitan76.mcpitanlib.api.block.CompatibleBlockSettings;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
+import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
 
 public class FuelGeneratorBlock extends MachineBlock {
 
+    public static final CompatMapCodec<FuelGeneratorBlock> CODEC = CompatMapCodec.createCodecOfExtendBlock(FuelGeneratorBlock::new);
+
     public FuelGeneratorBlock(CompatibleBlockSettings settings) {
         super(settings);
+    }
+
+    @Override
+    public CompatMapCodec<? extends FuelGeneratorBlock> getCompatCodec() {
+        return CODEC;
     }
 
     @Override

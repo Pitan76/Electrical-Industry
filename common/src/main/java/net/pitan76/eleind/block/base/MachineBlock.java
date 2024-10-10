@@ -8,6 +8,8 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import net.pitan76.eleind.ElectricalIndustry;
+import net.pitan76.eleind.api.energy.IEnergyStorage;
 import net.pitan76.eleind.api.state.EIProperties;
 import net.pitan76.eleind.api.state.IActiveHolder;
 import net.pitan76.eleind.block.entity.base.MachineBlockEntityWithExtendedContainer;
@@ -48,6 +50,13 @@ public abstract class MachineBlock extends ExtendBlock implements ExtendBlockEnt
     @Override
     public void onStateReplaced(StateReplacedEvent e) {
         e.spawnDropsInContainer();
+        if (e.hasBlockEntity()) {
+            BlockEntity blockEntity = e.getBlockEntity();
+            if (blockEntity instanceof IEnergyStorage) {
+                ElectricalIndustry.removeEnergyStorage((IEnergyStorage) blockEntity);
+            }
+        }
+
         super.onStateReplaced(e);
     }
 

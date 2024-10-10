@@ -10,9 +10,9 @@ import static net.pitan76.eleind.ElectricalIndustry.registry;
 
 public class Blocks {
 
-    public static RegistryResult<Block> GENERATOR;
+    public static RegistryResult<Block> FUEL_GENERATOR;
 
     public static void init() {
-        GENERATOR = registry.registerBlock(_id("generator"), () -> new FuelGeneratorBlock(CompatibleBlockSettings.of(CompatibleMaterial.STONE)));
+        FUEL_GENERATOR = registry.registerBlock(_id("generator"), () -> new FuelGeneratorBlock(CompatibleBlockSettings.of(CompatibleMaterial.STONE)));
     }
 }

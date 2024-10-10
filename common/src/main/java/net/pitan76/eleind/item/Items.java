@@ -17,6 +17,6 @@ public class Items {
     public static RegistryResult<Item> GENERATOR;
 
     public static void init() {
-        GENERATOR = registry.registerItem(_id("generator"), () -> ItemUtil.ofBlock(Blocks.GENERATOR.getOrNull(), STANDARD_ITEM_SETTINGS));
+        GENERATOR = registry.registerItem(_id("generator"), () -> ItemUtil.ofBlock(Blocks.FUEL_GENERATOR.getOrNull(), STANDARD_ITEM_SETTINGS));
     }
 }

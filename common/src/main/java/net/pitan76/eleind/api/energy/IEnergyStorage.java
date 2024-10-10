@@ -202,4 +202,8 @@ public interface IEnergyStorage {
     default void readEnergyNbt(ReadNbtArgs args) {
         readEnergyNbt(args.getNbt());
     }
+
+    default long getUsableCapacity() {
+        return getCapacityEnergy() - getEnergyStored();
+    }
 }
