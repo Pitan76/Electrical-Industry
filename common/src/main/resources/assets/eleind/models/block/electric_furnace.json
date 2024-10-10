@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "eleind:block/machine/side",
+    "down": "eleind:block/machine/bottom",
+    "up": "eleind:block/machine/top",
+    "north": "eleind:block/electric_furnace",
+    "east": "eleind:block/machine/side",
+    "south": "eleind:block/machine/side",
+    "west": "eleind:block/machine/side"
+  }
+}
