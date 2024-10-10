@@ -53,6 +53,7 @@ public class FuelGeneratorBlockEntity extends MachineBlockEntityWithExtendedCont
                 addEnergyStored(generateEnergyAmountOnTick() * 5);
             } else {
                 boolean success = startBurn(stack);
+                setActive(success);
                 if (!success)
                     maxBurnTime = 0;
             }
@@ -88,7 +89,7 @@ public class FuelGeneratorBlockEntity extends MachineBlockEntityWithExtendedCont
     }
 
     public boolean startBurn(ItemStack stack) {
-        if (stack.isEmpty()) return false;
+        if (ItemStackUtil.isEmpty(stack)) return false;
 
         int time = FuelRegistry.get(stack);
         if (time == 0) return false;

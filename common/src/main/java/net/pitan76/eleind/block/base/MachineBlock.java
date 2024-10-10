@@ -2,9 +2,14 @@ package net.pitan76.eleind.block.base;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
+import net.pitan76.eleind.api.state.EIProperties;
+import net.pitan76.eleind.api.state.IActiveHolder;
 import net.pitan76.eleind.block.entity.base.MachineBlockEntityWithExtendedContainer;
 import net.pitan76.mcpitanlib.api.block.CompatibleBlockSettings;
 import net.pitan76.mcpitanlib.api.block.ExtendBlock;
@@ -14,15 +19,17 @@ import net.pitan76.mcpitanlib.api.event.block.BlockUseEvent;
 import net.pitan76.mcpitanlib.api.event.block.PlacementStateArgs;
 import net.pitan76.mcpitanlib.api.event.block.StateReplacedEvent;
 import net.pitan76.mcpitanlib.api.util.PropertyUtil;
+import net.pitan76.mcpitanlib.api.util.WorldUtil;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class MachineBlock extends ExtendBlock implements ExtendBlockEntityProvider {
+public abstract class MachineBlock extends ExtendBlock implements ExtendBlockEntityProvider, IActiveHolder {
 
-    public DirectionProperty FACING = PropertyUtil.horizontalFacing();
+    public static DirectionProperty FACING = PropertyUtil.horizontalFacing();
+    public static BooleanProperty ACTIVE = EIProperties.ACTIVE;
 
     public MachineBlock(CompatibleBlockSettings settings) {
         super(settings);
-        setNewDefaultState(getNewDefaultState().with(FACING, Direction.NORTH));
+        setNewDefaultState(getNewDefaultState().with(FACING, Direction.NORTH).with(ACTIVE, false));
     }
 
     public ActionResult onRightClick(BlockUseEvent e) {
@@ -52,6 +59,18 @@ public abstract class MachineBlock extends ExtendBlock implements ExtendBlockEnt
     @Override
     public void appendProperties(AppendPropertiesArgs args) {
         args.addProperty(FACING);
+        args.addProperty(ACTIVE);
         super.appendProperties(args);
+    }
+
+    @Override
+    public boolean isActive(BlockState state) {
+        return state.get(ACTIVE);
+    }
+
+    @Override
+    public void setActive(World world, BlockPos pos, boolean active) {
+        BlockState state = WorldUtil.getBlockState(world, pos);
+        world.setBlockState(pos, PropertyUtil.with(state, ACTIVE, active));
     }
 }
