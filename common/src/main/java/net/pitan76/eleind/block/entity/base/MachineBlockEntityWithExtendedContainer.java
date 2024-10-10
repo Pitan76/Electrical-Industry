@@ -2,8 +2,10 @@ package net.pitan76.eleind.block.entity.base;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.util.math.Direction;
 import net.pitan76.eleind.api.energy.IEnergyStorage;
 import net.pitan76.eleind.api.state.IBlockEntityActiveHolder;
+import net.pitan76.eleind.block.base.MachineBlock;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
 import net.pitan76.mcpitanlib.api.event.nbt.ReadNbtArgs;
 import net.pitan76.mcpitanlib.api.event.nbt.WriteNbtArgs;
@@ -40,7 +42,14 @@ public abstract class MachineBlockEntityWithExtendedContainer extends ExtendedBl
     public boolean isActive() {
         Optional<BlockState> state = getOptionalBlockState();
         return state.filter(this::isActive).isPresent();
+    }
 
+    public Direction getFacing() {
+        Optional<BlockState> state = getOptionalBlockState();
+        if (state.isPresent())
+            return state.get().get(MachineBlock.FACING);
+
+        return Direction.NORTH;
     }
 
     public Optional<BlockState> getOptionalBlockState() {

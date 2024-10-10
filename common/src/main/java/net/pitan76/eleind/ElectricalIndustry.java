@@ -36,6 +36,11 @@ public class ElectricalIndustry extends CommonModInitializer {
             clearEnergyStorage();
         });
     }
+    
+    @ExpectPlatform
+    public static boolean isLoadedTeamRebornEnergy() {
+        return false;
+    }
 
     @ExpectPlatform
     public static void registerEnergyStorage() {

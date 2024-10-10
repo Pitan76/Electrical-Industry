@@ -1,8 +1,10 @@
 package net.pitan76.eleind.api.energy.util;
 
+import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.pitan76.eleind.ElectricalIndustry;
 import net.pitan76.eleind.api.energy.IEnergyStorage;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
 import net.pitan76.mcpitanlib.api.util.math.PosUtil;
@@ -34,24 +36,47 @@ public class EnergyUtil {
         return canTransfer(from, to, from.getMaxOutputEnergy());
     }
 
+    @Deprecated
     public static boolean transfer(BlockEntity from, BlockEntity to) {
         if (!(from instanceof IEnergyStorage) || !(to instanceof IEnergyStorage)) return false;
         return transfer((IEnergyStorage) from, (IEnergyStorage) to) > 0;
     }
 
     public static long transfer(BlockEntity from, BlockEntity to, long maxAmount) {
+        if (isTeamRebornEnergyStorage(from) || isTeamRebornEnergyStorage(to)) {
+            if (canTransferOther(from, to, maxAmount)) {
+                return transferOther(from, to, maxAmount);
+            }
+        }
+
         if (!(from instanceof IEnergyStorage) || !(to instanceof IEnergyStorage)) return 0;
         return transfer((IEnergyStorage) from, (IEnergyStorage) to, maxAmount);
     }
 
+    @Deprecated
     public static boolean canTransfer(BlockEntity from, BlockEntity to) {
         if (!(from instanceof IEnergyStorage) || !(to instanceof IEnergyStorage)) return false;
         return canTransfer((IEnergyStorage) from, (IEnergyStorage) to);
     }
 
     public static boolean canTransfer(BlockEntity from, BlockEntity to, long maxAmount) {
+        if (isTeamRebornEnergyStorage(from) || isTeamRebornEnergyStorage(to)) {
+            return canTransferOther(from, to, maxAmount);
+        }
+
         if (!(from instanceof IEnergyStorage) || !(to instanceof IEnergyStorage)) return false;
+
         return canTransfer((IEnergyStorage) from, (IEnergyStorage) to, maxAmount);
+    }
+
+    @ExpectPlatform
+    public static boolean canTransferOther(BlockEntity from, BlockEntity to, long maxAmount) {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
+    protected static long transferOther(BlockEntity from, BlockEntity to, long maxAmount) {
+        throw new AssertionError();
     }
 
     public static boolean transferNearby(BlockEntity from, long maxAmount) {
@@ -62,7 +87,7 @@ public class EnergyUtil {
 
         BlockPos[] nearPositions = PosUtil.getNeighborPoses(pos);
         for (BlockPos nearPos : nearPositions) {
-            if (WorldUtil.hasBlockEntity(world, nearPos)) continue;
+            if (!WorldUtil.hasBlockEntity(world, nearPos)) continue;
 
             BlockEntity to = WorldUtil.getBlockEntity(world, nearPos);
             if (to == null) continue;
@@ -74,5 +99,10 @@ public class EnergyUtil {
         }
 
         return false;
+    }
+
+    @ExpectPlatform
+    public static boolean isTeamRebornEnergyStorage(BlockEntity blockEntity) {
+        throw new AssertionError();
     }
 }
