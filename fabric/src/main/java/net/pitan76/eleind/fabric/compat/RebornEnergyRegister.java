@@ -15,11 +15,13 @@ public class RebornEnergyRegister {
 
     private static final Map<IEnergyStorage, TREnergyStorage> energyStorageMap = new HashMap<>();
 
+    public static boolean isInitialized = false;
+
     public static void init() {
-        List<RegistryResult<BlockEntityType<?>>> tileTypes = new ArrayList<>();
+        if (isInitialized) return;
+        isInitialized = true;
 
-        tileTypes.add(BlockEntities.FUEL_GENERATOR);
-
+        List<RegistryResult<BlockEntityType<?>>> tileTypes = BlockEntities.getBookingEnergyStorageBlockEntity();
         for (RegistryResult<BlockEntityType<?>> result : tileTypes) {
             EnergyStorage.SIDED.registerForBlockEntity((blockEntity, dir) -> {
                 if (!(blockEntity instanceof IEnergyStorage)) return null;
