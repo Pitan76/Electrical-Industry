@@ -31,7 +31,7 @@ public class ElectricFurnaceBlockEntity extends MachineBlockEntityWithExtendedCo
     public int cookTimeTotal;
 
     public static SimpleEnergyStorage.Builder energyStorageBuilder =
-            new SimpleEnergyStorage.Builder().capacity(10_000).maxInput(0).maxOutput(500);
+            new SimpleEnergyStorage.Builder().capacity(10_000).maxInput(500).maxOutput(0);
 
     private final IEnergyStorage energyStorage = energyStorageBuilder.build();
 
