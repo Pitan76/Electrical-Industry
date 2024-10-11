@@ -67,10 +67,10 @@ public class ElectricFurnaceBlockEntity extends MachineBlockEntityWithExtendedCo
                     //    cookTimeTotal = 0;
                 }
             }
+            BlockEntityUtil.markDirty(this);
         }
 
-        EnergyUtil.transferNearby(this, getEnergyStored());
-        BlockEntityUtil.markDirty(this);
+        //EnergyUtil.transferNearby(this, getEnergyStored());
     }
 
     @Override
