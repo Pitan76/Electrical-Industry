@@ -1,6 +1,5 @@
 package net.pitan76.eleind.block.entity;
 
-import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
@@ -8,7 +7,6 @@ import net.minecraft.screen.ScreenHandler;
 import net.pitan76.eleind.api.energy.EnergyStorageProvider;
 import net.pitan76.eleind.api.energy.IEnergyStorage;
 import net.pitan76.eleind.api.energy.SimpleEnergyStorage;
-import net.pitan76.eleind.api.energy.util.EnergyUtil;
 import net.pitan76.eleind.block.entity.base.MachineBlockEntityWithExtendedContainer;
 import net.pitan76.eleind.screen.ElectricFurnaceScreenHandler;
 import net.pitan76.mcpitanlib.api.entity.Player;
