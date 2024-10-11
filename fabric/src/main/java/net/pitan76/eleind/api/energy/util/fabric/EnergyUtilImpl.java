@@ -24,7 +24,7 @@ public class EnergyUtilImpl {
 
         if (trFrom == null || trTo == null) return false;
         
-        return trFrom.supportsExtraction() && trTo.supportsInsertion() && trFrom.getAmount() - maxAmount >= 0 && trTo.getAmount() + maxAmount <= trTo.getCapacity();
+        return trFrom.supportsExtraction() && trTo.supportsInsertion() && trFrom.getAmount() > 0 && trTo.getCapacity() - trTo.getAmount() > 0;
     }
 
     public static long transferOther(BlockEntity from, BlockEntity to, long maxAmount) {

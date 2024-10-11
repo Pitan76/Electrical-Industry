@@ -46,10 +46,18 @@ public abstract class MachineBlockEntityWithExtendedContainer extends ExtendedBl
 
     public Direction getFacing() {
         Optional<BlockState> state = getOptionalBlockState();
-        if (state.isPresent())
+        if (state.isPresent() && state.get().contains(MachineBlock.FACING))
             return state.get().get(MachineBlock.FACING);
 
         return Direction.NORTH;
+    }
+
+    public boolean isPowered() {
+        Optional<BlockState> state = getOptionalBlockState();
+        if (state.isPresent() && state.get().contains(MachineBlock.POWERED))
+            return state.get().get(MachineBlock.POWERED);
+
+        return false;
     }
 
     public Optional<BlockState> getOptionalBlockState() {

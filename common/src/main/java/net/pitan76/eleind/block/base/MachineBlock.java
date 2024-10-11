@@ -28,10 +28,11 @@ public abstract class MachineBlock extends ExtendBlock implements ExtendBlockEnt
 
     public static DirectionProperty FACING = PropertyUtil.horizontalFacing();
     public static BooleanProperty ACTIVE = EIProperties.ACTIVE;
+    public static BooleanProperty POWERED = PropertyUtil.powered();
 
     public MachineBlock(CompatibleBlockSettings settings) {
         super(settings);
-        setNewDefaultState(getNewDefaultState().with(FACING, Direction.NORTH).with(ACTIVE, false));
+        setNewDefaultState(getNewDefaultState().with(FACING, Direction.NORTH).with(ACTIVE, false).with(POWERED, false));
     }
 
     public ActionResult onRightClick(BlockUseEvent e) {
@@ -69,6 +70,7 @@ public abstract class MachineBlock extends ExtendBlock implements ExtendBlockEnt
     public void appendProperties(AppendPropertiesArgs args) {
         args.addProperty(FACING);
         args.addProperty(ACTIVE);
+        args.addProperty(POWERED);
         super.appendProperties(args);
     }
 
@@ -81,5 +83,13 @@ public abstract class MachineBlock extends ExtendBlock implements ExtendBlockEnt
     public void setActive(World world, BlockPos pos, boolean active) {
         BlockState state = WorldUtil.getBlockState(world, pos);
         world.setBlockState(pos, PropertyUtil.with(state, ACTIVE, active));
+    }
+
+    public Direction getFacing(BlockState state) {
+        return state.get(FACING);
+    }
+
+    public boolean isPowered(BlockState state) {
+        return state.get(POWERED);
     }
 }

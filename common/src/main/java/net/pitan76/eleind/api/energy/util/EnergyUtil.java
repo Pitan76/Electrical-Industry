@@ -10,9 +10,10 @@ import net.pitan76.mcpitanlib.api.util.math.PosUtil;
 
 public class EnergyUtil {
     public static long transfer(IEnergyStorage from, IEnergyStorage to, long maxAmount) {
-        if (!canTransfer(from, to, maxAmount)) return 0;
+        if (!canTransfer(from, to)) return 0;
 
-        long extracted = from.extractEnergy(maxAmount, true, false);
+        long amount = Math.min(maxAmount, to.getUsableCapacity());
+        long extracted = from.extractEnergy(amount, true, false);
         long inserted = to.insertEnergy(extracted, true, false);
 
         if (extracted != inserted) return 0;
@@ -27,12 +28,8 @@ public class EnergyUtil {
         return transfer(from, to, from.getMaxOutputEnergy());
     }
 
-    public static boolean canTransfer(IEnergyStorage from, IEnergyStorage to, long maxAmount) {
-        return from.canExtractEnergy() && to.canInsertEnergy() && from.canExtractEnergy(maxAmount) && to.canInsertEnergy(maxAmount);
-    }
-
     public static boolean canTransfer(IEnergyStorage from, IEnergyStorage to) {
-        return canTransfer(from, to, from.getMaxOutputEnergy());
+        return from.canExtractEnergy() && to.canInsertEnergy() && from.getEnergyStored() > 0 && to.getUsableCapacity() > 0;
     }
 
     @Deprecated
@@ -43,9 +40,7 @@ public class EnergyUtil {
 
     public static long transfer(BlockEntity from, BlockEntity to, long maxAmount) {
         if (isTeamRebornEnergyStorage(from) || isTeamRebornEnergyStorage(to)) {
-            if (canTransferOther(from, to, maxAmount)) {
-                return transferOther(from, to, maxAmount);
-            }
+            return transferOther(from, to, maxAmount);
         }
 
         if (!(from instanceof IEnergyStorage) || !(to instanceof IEnergyStorage)) return 0;
@@ -65,7 +60,7 @@ public class EnergyUtil {
 
         if (!(from instanceof IEnergyStorage) || !(to instanceof IEnergyStorage)) return false;
 
-        return canTransfer((IEnergyStorage) from, (IEnergyStorage) to, maxAmount);
+        return canTransfer((IEnergyStorage) from, (IEnergyStorage) to);
     }
 
     @ExpectPlatform
