@@ -9,7 +9,7 @@ import static net.pitan76.eleind.ElectricalIndustry.registry;
 public class ItemGroups {
 
     public static CreativeTabBuilder EI_GROUP = CreativeTabBuilder.create(_id("main"))
-            .setIcon(() -> ItemStackUtil.create(Items.GENERATOR.get()));
+            .setIcon(() -> ItemStackUtil.create(Items.FUEL_GENERATOR.get()));
 
     public static void init() {
         registry.registerItemGroup(EI_GROUP);

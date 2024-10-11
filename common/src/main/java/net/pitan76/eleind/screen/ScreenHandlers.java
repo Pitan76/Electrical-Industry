@@ -10,9 +10,11 @@ import static net.pitan76.eleind.ElectricalIndustry.registry;
 
 public class ScreenHandlers {
     public static SupplierResult<ScreenHandlerType<FuelGeneratorScreenHandler>> FUEL_GENERATOR_SCREEN_HANDLER;
+    public static SupplierResult<ScreenHandlerType<ElectricFurnaceScreenHandler>> ELECTRIC_FURNACE_SCREEN_HANDLER;
 
     public static void init() {
         FUEL_GENERATOR_SCREEN_HANDLER = register("fuel_generator", FuelGeneratorScreenHandler::new);
+        ELECTRIC_FURNACE_SCREEN_HANDLER = register("electric_furnace", ElectricFurnaceScreenHandler::new);
     }
 
     public static <T extends ScreenHandler> SupplierResult<ScreenHandlerType<T>> register(String id, ExtendedScreenHandlerTypeBuilder.Factory2<T> factory) {

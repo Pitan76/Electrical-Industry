@@ -12,9 +12,11 @@ import static net.pitan76.eleind.ElectricalIndustry.registry;
 public class BlockEntities {
 
     public static RegistryResult<BlockEntityType<?>> FUEL_GENERATOR;
+    public static RegistryResult<BlockEntityType<?>> ELECTRIC_FURNACE;
 
     public static void init() {
         FUEL_GENERATOR = register("fuel_generator", BlockEntityTypeBuilder.create(FuelGeneratorBlockEntity::new, Blocks.FUEL_GENERATOR.getOrNull()));
+        ELECTRIC_FURNACE = register("electric_furnace", BlockEntityTypeBuilder.create(ElectricFurnaceBlockEntity::new, Blocks.ELECTRIC_FURNACE.getOrNull()));
     }
 
     public static <T extends BlockEntity> RegistryResult<BlockEntityType<?>> register(String id, BlockEntityTypeBuilder<T> builder) {

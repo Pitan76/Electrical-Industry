@@ -1,5 +1,6 @@
 {
   "itemGroup.eleind.main": "Electric Industry",
 
-  "block.eleind.generator": "Generator"
+  "block.eleind.generator": "Fuel Generator",
+  "block.eleind.electric_furnace": "Electric Furnace"
 }

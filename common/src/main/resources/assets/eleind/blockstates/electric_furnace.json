@@ -1,0 +1,35 @@
+{
+  "variants": {
+    "facing=north,active=false": {
+      "model": "eleind:block/electric_furnace"
+    },
+    "facing=east,active=false": {
+      "model": "eleind:block/electric_furnace",
+      "y": 90
+    },
+    "facing=south,active=false": {
+      "model": "eleind:block/electric_furnace",
+      "y": 180
+    },
+    "facing=west,active=false": {
+      "model": "eleind:block/electric_furnace",
+      "y": 270
+    },
+
+    "facing=north,active=true": {
+      "model": "eleind:block/electric_furnace_on"
+    },
+    "facing=east,active=true": {
+      "model": "eleind:block/electric_furnace_on",
+      "y": 90
+    },
+    "facing=south,active=true": {
+      "model": "eleind:block/electric_furnace_on",
+      "y": 180
+    },
+    "facing=west,active=true": {
+      "model": "eleind:block/electric_furnace_on",
+      "y": 270
+    }
+  }
+}

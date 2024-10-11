@@ -1,5 +1,6 @@
 package net.pitan76.eleind.block.entity;
 
+import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
@@ -9,7 +10,7 @@ import net.pitan76.eleind.api.energy.IEnergyStorage;
 import net.pitan76.eleind.api.energy.SimpleEnergyStorage;
 import net.pitan76.eleind.api.energy.util.EnergyUtil;
 import net.pitan76.eleind.block.entity.base.MachineBlockEntityWithExtendedContainer;
-import net.pitan76.eleind.screen.FuelGeneratorScreenHandler;
+import net.pitan76.eleind.screen.ElectricFurnaceScreenHandler;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.block.TileCreateEvent;
 import net.pitan76.mcpitanlib.api.event.nbt.ReadNbtArgs;
@@ -20,24 +21,25 @@ import net.pitan76.mcpitanlib.api.network.PacketByteUtil;
 import net.pitan76.mcpitanlib.api.util.BlockEntityUtil;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.NbtUtil;
-import net.pitan76.mcpitanlib.core.registry.FuelRegistry;
 import net.pitan76.mcpitanlib.guilib.api.block.entity.ExtendedBlockEntityWithContainer;
 
-public class FuelGeneratorBlockEntity extends MachineBlockEntityWithExtendedContainer implements EnergyStorageProvider {
+public class ElectricFurnaceBlockEntity extends MachineBlockEntityWithExtendedContainer implements EnergyStorageProvider {
 
-    public int burnTime = 0;
-    public int maxBurnTime = 0;
+    public static final int DEFAULT_COOK_TIME = 200;
+
+    public int cookTime;
+    public int cookTimeTotal;
 
     public static SimpleEnergyStorage.Builder energyStorageBuilder =
             new SimpleEnergyStorage.Builder().capacity(10_000).maxInput(0).maxOutput(500);
 
     private final IEnergyStorage energyStorage = energyStorageBuilder.build();
 
-    public FuelGeneratorBlockEntity(BlockEntityType<?> type, TileCreateEvent e) {
+    public ElectricFurnaceBlockEntity(BlockEntityType<?> type, TileCreateEvent e) {
         super(type, e);
     }
 
-    public FuelGeneratorBlockEntity(TileCreateEvent e) {
+    public ElectricFurnaceBlockEntity(TileCreateEvent e) {
         this(BlockEntities.FUEL_GENERATOR.getOrNull(), e);
     }
 
@@ -46,16 +48,24 @@ public class FuelGeneratorBlockEntity extends MachineBlockEntityWithExtendedCont
         super.tick(e);
         if (isClient()) return;
 
-        if (!isFullEnergy()) {
-            ItemStack stack = getStack(0);
-            if (isBurning()) {
-                burnTime -= 3;
-                addEnergyStored(getGeneratingEnergyAmountOnTick());
+        if (!isEmptyEnergy() && canOutput()) {
+            ItemStack stack = getInputStack();
+
+            if (stack.isEmpty()) { //&& AbstractFurnaceBlockEntity.canUseAsFuel()) {
+                cookTime = 0;
+                cookTimeTotal = 0;
+                setActive(false);
             } else {
-                boolean success = startBurn(stack);
-                setActive(success);
-                if (!success)
-                    maxBurnTime = 0;
+                if (isCooking()) {
+                    cookTime -= 1;
+                    removeEnergyStored(getConsumingEnergyAmountOnTick());
+                } else {
+
+                    //boolean success = startCook();
+                    //setActive(success);
+                    //if (!success)
+                    //    cookTimeTotal = 0;
+                }
             }
         }
 
@@ -66,39 +76,48 @@ public class FuelGeneratorBlockEntity extends MachineBlockEntityWithExtendedCont
     @Override
     public void writeNbt(WriteNbtArgs args) {
         super.writeNbt(args);
-        NbtUtil.putInt(args.nbt, "burnTime", burnTime);
-        NbtUtil.putInt(args.nbt, "maxBurnTime", maxBurnTime);
+        NbtUtil.putInt(args.nbt, "cookTime", cookTime);
+        NbtUtil.putInt(args.nbt, "cookTimeTotal", cookTimeTotal);
     }
 
     @Override
     public void readNbt(ReadNbtArgs args) {
         super.readNbt(args);
-        burnTime = NbtUtil.getInt(args.nbt, "burnTime");
-        maxBurnTime = NbtUtil.getInt(args.nbt, "maxBurnTime");
+        cookTime = NbtUtil.getInt(args.nbt, "cookTime");
+        cookTimeTotal = NbtUtil.getInt(args.nbt, "cookTimeTotal");
     }
 
-    public long getGeneratingEnergyAmountOnTick() {
-        return 3;
+    public ItemStack getInputStack() {
+        return getStack(0);
     }
 
-    public boolean isBurning() {
-        return burnTime > 0;
+    public ItemStack getOutputStack() {
+        return getStack(1);
     }
 
-    public void startBurn(int time) {
-        maxBurnTime = time;
-        burnTime = time;
+    public boolean canOutput() {
+        ItemStack stack = getOutputStack();
+        if (stack.isEmpty()) return true;
+        if (!ItemStackUtil.areItemsEqual(stack, getOutputStack())) return false;
+
+        return stack.getCount() + 1 <= stack.getMaxCount();
     }
 
-    public boolean startBurn(ItemStack stack) {
-        if (ItemStackUtil.isEmpty(stack)) return false;
+    public long getConsumingEnergyAmountOnTick() {
+        return 1;
+    }
 
-        int time = FuelRegistry.get(stack);
-        if (time == 0) return false;
+    public boolean isCooking() {
+        return cookTime > 0;
+    }
 
-        ItemStackUtil.decrementCount(stack, 1);
-        startBurn(time);
-        return true;
+    public void startCook(int time) {
+        cookTime = time;
+        cookTimeTotal = time;
+    }
+
+    public void startCook() {
+        startCook(DEFAULT_COOK_TIME);
     }
 
     @Override
@@ -109,17 +128,17 @@ public class FuelGeneratorBlockEntity extends MachineBlockEntityWithExtendedCont
     @Override
     public void sync(Player player, PacketByteBuf buf) {
         PacketByteUtil.writeLong(buf, this.getEnergyStored());
-        PacketByteUtil.writeInt(buf, this.burnTime);
-        PacketByteUtil.writeInt(buf, this.maxBurnTime);
+        PacketByteUtil.writeInt(buf, this.cookTime);
+        PacketByteUtil.writeInt(buf, this.cookTimeTotal);
     }
 
     @Override
     public int getDefaultInvSize() {
-        return 1;
+        return 2;
     }
 
     @Override
     public ScreenHandler createMenu(CreateMenuEvent e) {
-        return new FuelGeneratorScreenHandler(e, this, this);
+        return new ElectricFurnaceScreenHandler(e, this, this);
     }
 }
